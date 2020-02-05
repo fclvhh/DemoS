@@ -1,33 +1,110 @@
-// 1. 没有new的代码实现
 
-function Person(name,age) {
-  var temp = {}
+// ES3: 没有new 完成上述代码
+function  Animal2(name,age) {
+  let temp = {} // 1.手动创建空对象
   temp.name = name
-  temp.age = age
-  // 绑定原型
-  temp.__proto__ = Person.prototype 
+  temp.age = age   // 从这里的比较就可以发现 , this究竟值的是什么!!! 就是临时空对象
+  temp.__proto__ = Animal2.prototype
   return temp
 }
-Person.prototype.run = function() {
-  console.log('跑起来!!!')
+Animal2.prototype.eat = function() {
+  console.log('吃吃吃!!!')
 }
-Person.prototype.eat = function() {
-  console.log("吃饱了!!!")
+Animal2.prototype.run = function() {
+  console.log('跑起来吧!!!')
 }
-var obj1 = Person('张三',19)
+let animal2 = Animal2('dog',2)
 
-// 没有new 完成继承
-function Children(name,age) {
-  // 等价于 let temp = Person(name,age) , 这里this就是指children
-  console.log('hi')
-  let temp = Person(name,age)
-  console.log(1)
-  // 在原型上绑定属性
-  temp.__proto__.cry = Children.prototype.cry
-  console.log(2)
-  return temp
+
+
+// ES3 代码实现 
+  // 1. 私有属性
+function Animal (name,age) {
+  this.name = name
+  this.age = age
 }
-Children.prototype.cry = function() {
-  console.log('呜呜呜!!!')
+  // 2. 共有属性 , 绑在构造函数的原型上
+Animal.prototype.eat = function() {
+  console.log('吃吃吃!!!')
 }
-var obj2 = Children('son',1)
+Animal.prototype.run = function() {
+  console.log('跑起来吧!!!')
+}
+  // 3. 创建实例
+let animal = new Animal('cat',1)
+animal.run()
+animal.eat()
+
+// ES3实现继承 
+function Human(idCard,name,age) {
+  // 1. 获取父类的属性
+  Animal.call(this,name,age)
+  this.idCard = idCard
+}
+  // 2. 获取父类的公共方法
+Human.prototype = Object.create(Animal.prototype)
+Human.prototype.constructor = Human
+
+Human.prototype.use = function() {
+  console.log('人类和动物最大的区别: 人类会使用工具!!!')
+}
+let human = new Human(111111,'sun',19)
+console.log(human)
+
+
+
+
+class Person {
+  // 私有代码放在constructor 里面
+  constructor(name,age) {
+    this.name = name
+    this.age = age
+  }
+  // 共有代码放到外面
+  eat() {
+    console.log('吃吃吃!!!')    
+  }
+  run() {
+    console.log('跑跑跑!!!') 
+  }
+  hand = 'five'
+}
+
+class Children extends Person {
+  constructor(name,age,id) {
+    super(name,age)
+    this.id = id
+  }
+  cry() {
+    console.log('哭哭哭!!!')    
+  }
+}
+let nn = new Children('sun',1,111)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
