@@ -81,9 +81,94 @@ class Children extends Person {
 }
 let nn = new Children('sun',1,111)
 
+// mixin 代码
+const mixin = (Base,mixins) => Object.assign(Base.prototype,mixins)
+const Fly = {
+  canFly() {
+    console.log('飞飞飞!!!')
+  }
+}
+class Bird {
+  eag() {
+    console.log('下蛋啦!!!')
+  }
+}
+mixin(Bird,Fly)
+let mm = new Bird() 
+
+// mixin变异版
+const RunMixin = (Base) => class extends Base {
+      canRun() {
+        console.log('running!!!')
+    
+  }
+}
+const SwimMixin = Base => {
+  return class extends Base {
+    canSwim() {
+      console.log('游泳!!!')
+    }
+  }
+}
+class Xxx {
+  xuan() {
+    console.log('只有我一个人想笑吗!!!')
+  }
+}
+console.log('2')
+const RunXxx = RunMixin(Xxx)
+console.log(RunXxx)
+console.log('1')
+let x1 = new RunXxx() 
+
+const SwimXxx = SwimMixin(Xxx)
+let x2 = new SwimXxx()
 
 
+// 测试题代码!!
 
+class People {
+  constructor(name) {
+    this.name = name
+  }
+  sayName() {
+    console.log('我的名字是'+this.name)
+  }
+  setName(value) {
+    this.name = value
+    console.log(this.name)
+  }
+}
+class Doctor extends Person {
+  constructor(name,profession) {
+    super(name)
+    this.profession = profession
+  }
+  sayProfession() {
+    console.log('我的职业是'+this.profession)
+  }
+}
+
+function People(name) {
+  this.name = name
+}
+People.prototype.sayName = function() {
+  console.log('我的名字是'+this.name)
+}
+People.prototype.setName = function(value) {
+  this.name = value
+  console.log(this.name)
+}
+
+function Doctor(name,profession) {
+  People.call(this,name)
+  this.profession = profession
+}
+Doctor.prototype = Object.create(People.prototype)
+Doctor.prototype.construct = Doctor
+Doctor.prototype.sayProfession = function() {
+  console.log('我的职业是'+this.profession)
+}
 
 
 
