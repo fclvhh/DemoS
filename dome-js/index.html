@@ -5,8 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>js的demo</title>
+  <style>
+    .active {
+      border: 2px solid yellow;
+    }
+  </style>
 </head>
 <body>
+    
   <script src="./index.js"></script>
+  <script>
+    // 写html
+    let div = document.createElement('div')
+    div.innerHTML = `
+    <p>哈哈哈
+      <span style="color: red;font-size: 30px;">我是你爹</span>
+    </p>
+    `
+    document.body.appendChild(div)
+    // 修改html
+     // 1. 修改class
+    div.classList.add('active')
+     // 2. 修改style
+    div.style.margin = '20px'
+     // 3.修改内容
+     div.innerHTML = ''
+     div.innerHTML = `
+      <p>哈哈哈
+        <span style="color: red;font-size: 30px;">这个真不行!</span>
+      </p>
+      <hr>
+      <h2>hello,hello!!!</h2>
+     `
+      
+     // 查
+     div.children[3].classList.add('active')
+  </script>
 </body>
 </html>

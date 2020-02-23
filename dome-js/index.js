@@ -149,41 +149,174 @@ class Doctor extends Person {
   }
 }
 
-function People(name) {
-  this.name = name
+// function People(name) {
+//   this.name = name
+// }
+// People.prototype.sayName = function() {
+//   console.log('我的名字是'+this.name)
+// }
+// People.prototype.setName = function(value) {
+//   this.name = value
+//   console.log(this.name)
+// }
+
+// function Doctor(name,profession) {
+//   People.call(this,name)
+//   this.profession = profession
+// }
+// Doctor.prototype = Object.create(People.prototype)
+// Doctor.prototype.construct = Doctor
+// Doctor.prototype.sayProfession = function() {
+//   console.log('我的职业是'+this.profession)
+// }
+
+
+// 闭包代码
+function Counter() {
+  let num = 0
+  function add() {
+    num++
+    console.log(num)
+  }
+  return add
 }
-People.prototype.sayName = function() {
-  console.log('我的名字是'+this.name)
+let add1 = Counter()
+add1() //  1
+add1() //  2
+
+// 闭包: 封装数据
+  // 1. cache 是一个api对象 , 函数自调用返回一个api对象  「jQuery设计原理」
+  // 2. api对象 , 里有三个api函数 , 根据闭包 , 会回溯store对象
+  // 3. 我们只能按照事先写好的逻辑操作store , 不可以随意修改
+const cache = (()=>{
+  const store = {}
+  return {
+    get(key) {
+      return store[key]
+    },
+    set(key,value) {
+      store[key] = value 
+    },
+    remove(key) {
+      delete store[key]
+    }
+  }
+})()
+
+// 闭包:暂存数据
+function sum(a) {
+  return function(b) {
+    return a+b
+  }
 }
-People.prototype.setName = function(value) {
-  this.name = value
-  console.log(this.name)
+const sum1 = sum(1)
+const sum2 = sum1(2)
+console.log(sum2)
+
+// 闭包 : 模仿私有属性
+function Cat() {
+  var name
+  // 内部函数 , 引用词法作用域的变量 , 形成闭包
+  this.setName = function(value) {
+    name = value
+  }
+  this.getName = function() {
+    return name
+  }
+}
+console.log('hi')
+let mimi = new Cat()
+mimi.setName('wuwuwu')
+mimi.getName()
+
+class cat {
+  constructor() {
+    var name
+    Object.assign(this,{
+      setName(value) {
+        name = value
+      },
+      getName() {
+        return name
+      }
+    }) 
+  }
+}
+let pupu = new cat()
+pupu.setName('七七')
+pupu.getName()
+
+// 闭包： 高阶函数
+const makeUrl = function(domain) {
+  function fn(path) {
+    return `https://${domain}${path}`
+  }
+  return fn
+}
+const makeXdmlUrl = makeUrl(`xiedaimala.com`)
+const url1 = makeXdmlUrl('/index')
+
+
+// 闭包: 面试题
+function makeCounter() {
+  let count = 0
+  return function() {
+      return ++count
+  }
+}
+let counter = makeCounter()
+let counter2 = makeCounter()
+console.log(counter())
+console.log(counter())
+console.log(counter())
+console.log(counter2())
+
+let users = [
+  {name:"Bob",age:20,company:"Baidu"},
+  {name:"Cat",age:18,company:"Alibaba"},
+  {name:"Ann",age:19,company:"Tecent"}
+]
+users.sort(byName)
+users.sort(byAge)
+users.sort(byField('company'))
+users.sort(byField('age'))
+
+function byName(user1,user2) {
+  return user1.name>user2.name?1:-1
+}
+function byAge(user1,user2) {
+  return user1.age>user2.age?1:-1
+}
+function byFeild(field) { 
+  return function(user1,user2){ 
+    return user1[field]>user2[field]?1:-1
+  }
 }
 
-function Doctor(name,profession) {
-  People.call(this,name)
-  this.profession = profession
+// 闭包: 测试题
+class People {
+  constructor() {
+    var firstName
+    var lastName
+    Object.assign(this,{
+      getFirstName() {
+        return firstName
+      },
+      setFirstName(value) {
+        firstName = value
+      },
+      getLastName() {
+        return lastName
+      },
+      setLastName(value) {
+        lastName = value
+      }  
+    })
+  }
+  getFullName() {
+    return `${this.firstName} ${this.lastName}`
+  }
 }
-Doctor.prototype = Object.create(People.prototype)
-Doctor.prototype.construct = Doctor
-Doctor.prototype.sayProfession = function() {
-  console.log('我的职业是'+this.profession)
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
